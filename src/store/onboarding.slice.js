@@ -11,8 +11,8 @@ const initialState = {
   applicantId: "",
   token: "",
   document: {
-    type: "passport",
-    country: "PHL",
+    type: "",
+    country: "",
     photo: "",
   },
 };
@@ -30,20 +30,20 @@ export const onboardingSlice = createSlice({
       applicantId: payload,
     }),
     setToken: (state, { payload }) => ({ ...state, token: payload }),
-    setDocumentType: (state, { payload }) => ({
-      ...state,
-      document: { ...state.document, type: payload },
-    }),
-    setCountry: (state, { payload }) => ({
-      ...state,
-      document: { ...state.document, country: payload },
-    }),
+    setDocumentType: (state, { payload }) => {
+      state.document = { ...state.document, type: payload }
+      return state
+    },
+    setCountry: (state, { payload }) => {
+      state.document = { ...state.document, country: payload }
+      return state
+    },
     setPhoto: (state, { payload }) => ({
       ...state,
       document: { ...state.document, photo: payload },
     }),
   },
-  extraReducers: () => {},
+  extraReducers: () => { },
 });
 
 export const {
@@ -66,7 +66,20 @@ export const onBoardingApiSlice = apiBackendSlice.injectEndpoints({
         body: args,
       }),
     }),
+    PostOnfidoToken: builder.mutation({
+      query: (args) => ({
+        url: `/api/application/sdk_token?applicantId=${args.applicantId}`,
+        method: "GET",
+      }),
+    }),
+    PostTakePhoto: builder.mutation({
+      query: (args) => ({
+        url: '/api/application/validateImage',
+        method: "POST",
+        body: args
+      }),
+    }),
   }),
 });
 
-export const { usePostOnBoardingMutation } = onBoardingApiSlice;
+export const { usePostOnBoardingMutation, usePostOnfidoTokenMutation, usePostTakePhotoMutation } = onBoardingApiSlice;

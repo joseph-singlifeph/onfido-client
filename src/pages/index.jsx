@@ -54,8 +54,8 @@ export default function Home() {
   }, [dispatch, resApplicant]);
 
   const onSubmit = (data) => {
-    dispatch(setCountry(data));
-    navigate("/selectId");
+    dispatch(setCountry(data.country));
+    navigate("/documentview");
   };
 
   return (
